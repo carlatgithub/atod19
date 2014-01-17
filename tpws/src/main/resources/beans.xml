@@ -1,0 +1,51 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	 xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+http://cxf.apache.org/jaxrs
+http://cxf.apache.org/schemas/jaxrs.xsd">
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+<jaxrs:server id="myRestServices" address="/rest">
+	<jaxrs:serviceBeans>
+	    <ref bean="serviceImpl" />
+	</jaxrs:serviceBeans>
+	<jaxrs:extensionMappings>
+	   <entry key="xml" value="application/xml" /> <entry key="json" value="application/json" />
+	</jaxrs:extensionMappings>
+	</jaxrs:server>
+<bean id="serviceImpl" class="pack_rest.TvaRest" />
+
+
+	<bean id="calculTvaImpl" class="fr.afcepf.atod19.soa.service.CalculTvaImpl">
+		<!-- avec sous balise property pour injecter un dao -->
+	</bean>
+
+	<jaxws:endpoint id="calculTvaService" implementor="#calculTvaImpl"
+		address="/CalculTva">
+		<jaxws:inInterceptors>
+			<ref bean="basicHttpSecurityInterceptor" />
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>	 <!-- implementator="#idBeanSpring" url : "http://localhost:8080/tpws" + "/services" 
+		+ /CalculTva" -->
+
+
+	<bean id="userMapAuthManager" class="generic.util.auth.local.UserMapAuthManager">
+		<property name="users">
+			<map>
+				<entry key="user1" value="pwd1" />
+				<entry key="user2" value="pwd2" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="basicHttpSecurityInterceptor" class="generic.ws.util.interceptor.cxf.CxfBasicAuthInterceptor">
+		<property name="authManager" ref="userMapAuthManager" />
+		<!-- test avec mode ="preemptive" dans soap-ui recent -->
+	</bean>
+</beans>
