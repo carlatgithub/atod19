@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	<form-bean name="ajoutClientFb" 
+	type="fr.afcepf.atod19.jspServlet.struts.actionForm.AjoutClientActionForm"/>
+	</form-beans>
+
+	<global-forwards></global-forwards>
+
+	<action-mappings>
+<action path="/ajoutClient" 
+name="ajoutClientFb" scope="request"  validate="true" input="/ajoutClient.jsp"
+type="fr.afcepf.atod19.jspServlet.struts.action.AjoutClientAction">
+
+<forward name="ok" 
+path="/bonjour.jsp"></forward>
+
+</action>
+	</action-mappings>
+
+<message-resources parameter="fr.afcepf.atod19.jspServlet.struts.ressource.atod19"></message-resources>
+</struts-config>
